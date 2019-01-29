@@ -73,6 +73,8 @@ Saved/*
 Intermediate/*
 Plugins/*/Intermediate/*
 **/StarterContent/*
+#**/StarterContent/!Maps*
+
 
 # Cache files for the editor to use
 DerivedDataCache/*
