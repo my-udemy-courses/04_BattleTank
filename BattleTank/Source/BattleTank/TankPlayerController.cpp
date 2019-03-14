@@ -70,7 +70,7 @@ bool ATankPlayerController::GetRaycastHit(FVector LookDirection, FVector StartLo
 	auto End = ((LookDirection * ShootRange) + StartLocation);
 	FCollisionQueryParams CollisionParams;
 
-	DrawDebugLine(GetWorld(), StartLocation, End, FColor::Green, false, 1, 0, 2);
+	//DrawDebugLine(GetWorld(), StartLocation, End, FColor::Green, false, 1, 0, 2);
 
 	if (GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, End, ECollisionChannel::ECC_Visibility, CollisionParams))
 	{
