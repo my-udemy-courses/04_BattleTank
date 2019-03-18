@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -11,25 +12,9 @@ UTankAimingComponent::UTankAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
-
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }
+
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
@@ -39,20 +24,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	auto LaunchLocation = Barrel->GetSocketLocation(FName("ProjectileStart"));
 
 	// Calculate Projectile Velocity and Direction
-	if (UGameplayStatics::SuggestProjectileVelocity(
+	bool HaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
 		LaunchLocation,
 		HitLocation,
 		LaunchSpeed,
-		false,
-		0,
-		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
-	)) {
+	);
+	if (HaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto TankName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *AimDirection.ToString());
+		MoveBarrel(AimDirection);
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("aiming failed"));
@@ -60,7 +42,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 }
 
-void UTankAimingComponent::SetBarrelRef(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::MoveBarrel(FVector AimDirection)
+{
+	// Get the barrel ref
+	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
+	auto AimRotation = AimDirection.Rotation();
+	auto DeltaRotation = AimRotation - BarrelRotation;
+
+	Barrel->Elevate(5); // TODO remove magic num
+}
+
+void UTankAimingComponent::SetBarrelRef(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
