@@ -34,6 +34,11 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ATank::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("FIRE!!!"));
+}
+
 // Should be called by BluePrint
 void ATank::SetBarrelRef(UTankBarrel* BarrelToSet)
 {

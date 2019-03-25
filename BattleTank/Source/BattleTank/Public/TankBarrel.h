@@ -20,7 +20,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float DegreesPerSecond = 5;
+	float DegreesPerSecond = 10;
 
 	UPROPERTY(EditAnywhere)
 	float MaxElevationDegrees = 90; // 90° allows for self destruction :DDDD

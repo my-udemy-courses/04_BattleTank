@@ -24,8 +24,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetBarrelRef(UTankBarrel* BarrelToSet);
+
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetTurretRef(UTankTurret* TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Fire();
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
@@ -41,5 +45,5 @@ protected:
 	bool IsActive = true;
 
 	UPROPERTY(EditAnywhere)
-	float LaunchSpeed = 200000;  // TODO find a sensible default value
+	float LaunchSpeed = 5000;  
 };
