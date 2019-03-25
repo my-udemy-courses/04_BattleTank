@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -11,7 +12,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 
 }
 
@@ -38,6 +38,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (HaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
+		MoveTurret(AimDirection);
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("aiming failed"));
@@ -52,10 +53,23 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto AimRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimRotation - BarrelRotation;
 
-	Barrel->Elevate(5); // TODO remove magic num
+	Barrel->Move(DeltaRotation.Pitch);
+}
+void UTankAimingComponent::MoveTurret(FVector AimDirection)
+{
+	// Get the barrel ref
+	auto TurretRotation = Turret->GetForwardVector().Rotation();
+	auto AimRotation = AimDirection.Rotation();
+	auto DeltaRotation = AimRotation - TurretRotation;
+
+	Turret->Move(DeltaRotation.Yaw);
 }
 
 void UTankAimingComponent::SetBarrelRef(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+void UTankAimingComponent::SetTurretRef(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
 }

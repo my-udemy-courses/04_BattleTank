@@ -8,6 +8,7 @@
 
 // Forward Declarations
 class UTankBarrel;
+class UTankTurret;
 class UTankAimingComponent;
 
 UCLASS()
@@ -23,6 +24,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetBarrelRef(UTankBarrel* BarrelToSet);
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetTurretRef(UTankTurret* TurretToSet);
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;

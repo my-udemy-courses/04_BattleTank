@@ -34,7 +34,13 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+// Should be called by BluePrint
 void ATank::SetBarrelRef(UTankBarrel* BarrelToSet)
 {
 	TankAimingComponent->SetBarrelRef(BarrelToSet);
+}
+// Should be called by BluePrint
+void ATank::SetTurretRef(UTankTurret* TurretToSet)
+{
+	TankAimingComponent->SetTurretRef(TurretToSet);
 }
