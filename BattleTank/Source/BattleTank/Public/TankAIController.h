@@ -22,10 +22,7 @@ protected:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	virtual void AimTowardsPlayerTank();
-
-	ATank* GetControlledTank() const;
-
-	ATank* GetPlayerTank() const;
+	ATank* Tank = nullptr;
+	ATank* PlayerTank = nullptr;
 
 };

@@ -25,7 +25,7 @@ void ATank::AimAt(FVector HitLocation)
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	LastFireTime = -ReloadTimeInSeconds;
 }
 
 // Called to bind functionality to input
@@ -37,14 +37,21 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::Fire()
 {
-	if (!Barrel) return;
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	UE_LOG(LogTemp, Warning, TEXT("FIRE!!!"));
+	if (Barrel && isReloaded) {
+		// Spawn projectile at socket location of barrel
+		auto LaunchLocation = Barrel->GetSocketLocation(FName("ProjectileStart"));
+		auto LaunchRotation = Barrel->GetSocketRotation(FName("ProjectileStart"));
+		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBP, 
+			LaunchLocation, 
+			LaunchRotation
+		);
 
-	// spawn projectile at socket location of barrel
-	auto LaunchLocation = Barrel->GetSocketLocation(FName("ProjectileStart"));
-	auto LaunchRotation = Barrel->GetSocketRotation(FName("ProjectileStart"));
-	GetWorld()->SpawnActor<AProjectile>(Projectile, LaunchLocation, LaunchRotation);
+		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+	}
 }
 
 // Should be called by BluePrint

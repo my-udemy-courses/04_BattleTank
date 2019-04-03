@@ -45,11 +45,16 @@ protected:
 	UPROPERTY(EditAnywhere)
 	bool IsActive = true;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LaunchSpeed = 5000;  
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AProjectile> Projectile;
+	TSubclassOf<AProjectile> ProjectileBP;
 
 	UTankBarrel* Barrel;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ReloadTimeInSeconds = 3;
+
+	float LastFireTime;
 };

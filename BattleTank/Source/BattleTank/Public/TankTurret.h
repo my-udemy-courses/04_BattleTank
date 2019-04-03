@@ -19,7 +19,8 @@ public:
 	void Move(float SpeedFactor);
 
 private:
-	UPROPERTY(EditAnywhere)
-		float DegreesPerSecond = 25;
+
+	UPROPERTY(EditDefaultsOnly)
+	float DegreesPerSecond = 25;
 
 };
