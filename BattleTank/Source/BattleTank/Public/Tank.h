@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	// Are this tanks engines running? 
+	UPROPERTY(EditAnywhere)
+	bool IsActive = true;
+
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
@@ -40,10 +44,6 @@ protected:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Are this tanks engines running? 
-	UPROPERTY(EditAnywhere)
-	bool IsActive = true;
 
 	UPROPERTY(EditDefaultsOnly)
 	float LaunchSpeed = 5000;  
