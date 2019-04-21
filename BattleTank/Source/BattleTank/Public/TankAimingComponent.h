@@ -10,6 +10,13 @@
 class UTankBarrel; 
 class UTankTurret;
 
+UENUM()
+enum class EFiringStatus : uint8 {
+	Reloading,
+	Aiming,
+	OnTarget
+};
+
 // Holds barrel properties
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -26,7 +33,9 @@ public:
 	void SetTurretRef(UTankTurret* TurretToSet);
 
 protected:
-	
+	UPROPERTY(BlueprintReadOnly)
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
+
 	// Elevates (pitches) the Barrel to AimDirection's pitch value
 	void MoveBarrel(FVector AimDirection);
 	// Yaws the Turret to AimDirection's yaw value
