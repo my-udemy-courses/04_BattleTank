@@ -11,7 +11,7 @@ class UTankTrack;
 /**
  * Provides methods for moving tank.
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 {
 	GENERATED_BODY()

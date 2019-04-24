@@ -8,9 +8,10 @@
 
 // FD
 class ATank;
+class UTankAimingComponent;
 
 /**
- * 
+ * Responsible for helping player to aim...
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -18,6 +19,7 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
+
 	UFUNCTION(BlueprintCallable)
 	ATank* GetControlledTank() const;
 	
@@ -25,7 +27,11 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 	
-private:
+protected:
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void FoundAimingComponent(UTankAimingComponent* AimingComponentRef);
+
 	// Start the tank rotate the barrel so that a shot whould hit
 	// where the crosshair intersects the world
 	void AimTowardsCrosshair();
