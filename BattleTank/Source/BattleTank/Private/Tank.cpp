@@ -16,7 +16,7 @@ ATank::ATank()
 void ATank::AimAt(FVector HitLocation)
 {
 	if (!IsActive) return;
-	if (!TankAimingComponent) return; 
+	if (ensure(!TankAimingComponent)) return; 
 
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
@@ -30,7 +30,7 @@ void ATank::BeginPlay()
 
 void ATank::Fire()
 {
-	if (!TankAimingComponent) return;
+	if (ensure (!TankAimingComponent)) return;
 	if (!IsActive) return;
 
 	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;

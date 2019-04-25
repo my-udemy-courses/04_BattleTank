@@ -32,7 +32,7 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
+	if (ensure(!GetControlledTank())) { return; }
 
 	// Get world location of linetrace through crosshair
 	FVector OutHitLocation;
