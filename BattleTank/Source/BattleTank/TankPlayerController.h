@@ -7,7 +7,6 @@
 #include "TankPlayerController.generated.h" // must be last include
 
 // FD
-class ATank;
 class UTankAimingComponent;
 
 /**
@@ -19,9 +18,6 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-
-	UFUNCTION(BlueprintCallable)
-	ATank* GetControlledTank() const;
 	
 	virtual void BeginPlay() override;
 
@@ -43,6 +39,9 @@ protected:
 	bool GetLookDirection(FVector2D ScreenLocation, FVector &LookDirection) const;
 	
 	bool GetRaycastHit(FVector LookDirection, FVector StartLocation, FVector &HitLocation) const;
+
+	UPROPERTY(EditDefaultsOnly)
+	UTankAimingComponent* AimingComponent = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float CrossHairXLocation = 0.5;

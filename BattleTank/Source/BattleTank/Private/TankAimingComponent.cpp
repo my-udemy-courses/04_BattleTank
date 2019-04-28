@@ -3,6 +3,7 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -11,16 +12,28 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	IsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (!IsReloaded) {
+		FiringStatus = EFiringStatus::Reloading;
+	} else if (FiringStatus == EFiringStatus::Reloading && IsReloaded) {
+		FiringStatus = EFiringStatus::Aiming;
+	}
 }
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
+	LastFireTime = -ReloadTimeInSeconds;
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	if (ensure(!Barrel)) return;
 
@@ -33,7 +46,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		OutLaunchVelocity,
 		LaunchLocation,
 		HitLocation,
-		LaunchSpeed,
+		this->LaunchSpeed,
 		false,
 		0,
 		0,
@@ -50,6 +63,25 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 }
 
+void UTankAimingComponent::Fire() 
+{
+	if (FiringStatus != EFiringStatus::Reloading && ensure(ProjectileBP)) {
+		FVector LaunchLocation;
+		FRotator LaunchRotation;
+		GetProjectileSpawnInfo(LaunchLocation, LaunchRotation);
+
+		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBP,
+			LaunchLocation,
+			LaunchRotation
+		);
+
+		SpawnedProjectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+		FiringStatus = EFiringStatus::Aiming;
+	}
+}
+
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
 	if (ensure(!Barrel)) return;
@@ -60,6 +92,7 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 
 	Barrel->Move(DeltaRotation.Pitch);
 }
+
 void UTankAimingComponent::MoveTurret(FVector AimDirection)
 {
 	if (ensure(!Turret)) return;

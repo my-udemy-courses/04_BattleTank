@@ -7,7 +7,7 @@
 #include "TankAIController.generated.h"
 
 // Forward declarations
-class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -22,8 +22,7 @@ protected:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	ATank* Tank = nullptr;
-	ATank* PlayerTank = nullptr;
+	UTankAimingComponent* AimingComponent = nullptr;
 
 	// How close can the AI tank to player? 
 	float AcceptanceRadius = 3000;
