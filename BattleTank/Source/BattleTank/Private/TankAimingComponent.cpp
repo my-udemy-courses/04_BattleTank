@@ -45,7 +45,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		MoveTurret(AimDirection);
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("aiming failed"));
+		// UE_LOG(LogTemp, Warning, TEXT("aiming failed"));
 	}
 
 }

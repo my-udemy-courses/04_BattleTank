@@ -10,7 +10,6 @@ void ATankPlayerController::BeginPlay()
 		
 	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
 	if (AimingComponent) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController found aiming comp!"));
 		FoundAimingComponent(AimingComponent);
 	}
 

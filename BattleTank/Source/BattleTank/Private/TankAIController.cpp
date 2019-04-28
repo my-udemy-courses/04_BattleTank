@@ -9,23 +9,12 @@ void ATankAIController::BeginPlay()
 	
 	// Get own tank
 	Tank = Cast<ATank>(GetPawn());
-	if (!Tank) {
-		UE_LOG(LogTemp, Warning, TEXT("TankAIController no possessing tank"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("TankAIController possesing tank: %s"), *Tank->GetName());
-	}
+	ensure(Tank);
 
 	// Get player's tank
 	APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (PlayerPawn) {
+	if (ensure(PlayerPawn)) {
 		PlayerTank = Cast<ATank>(PlayerPawn);
-	}
-	if (!PlayerTank) {
-		UE_LOG(LogTemp, Warning, TEXT("TankAIController could not find player's tank! :("));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("TankAIController found player's tank!!: %s"), *PlayerTank->GetName());
 	}
 }
 

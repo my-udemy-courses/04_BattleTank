@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Projectile.h"
 
 // Sets default values
@@ -26,6 +25,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	LastFireTime = -ReloadTimeInSeconds;
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 }
 
 void ATank::Fire()
