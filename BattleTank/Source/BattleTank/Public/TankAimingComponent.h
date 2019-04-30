@@ -50,6 +50,11 @@ protected:
 	// Yaws the Turret to AimDirection's yaw value
 	void MoveTurret(FVector AimDirection);
 
+	UPROPERTY(EditAnywhere)
+	bool IsBarrelMoving;
+	UPROPERTY(EditAnywhere)
+	bool IsTurretMoving;
+
 	UPROPERTY(BlueprintReadOnly)
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 

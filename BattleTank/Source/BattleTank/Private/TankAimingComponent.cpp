@@ -22,10 +22,15 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 
 	if (!IsReloaded) {
 		FiringStatus = EFiringStatus::Reloading;
-	} else if (FiringStatus == EFiringStatus::Reloading && IsReloaded) {
+	} 
+	else if (IsBarrelMoving || IsTurretMoving) {
 		FiringStatus = EFiringStatus::Aiming;
 	}
+	else {
+		FiringStatus = EFiringStatus::OnTarget;
+	}
 }
+
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
 	Barrel = BarrelToSet;
@@ -89,8 +94,9 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto AimRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimRotation - BarrelRotation;
-
+	
 	Barrel->Move(DeltaRotation.Pitch);
+	this->IsBarrelMoving = FMath::Abs(DeltaRotation.Pitch) > 0.05f;
 }
 
 void UTankAimingComponent::MoveTurret(FVector AimDirection)
@@ -102,6 +108,7 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection)
 	auto DeltaRotation = AimRotation - TurretRotation;
 
 	Turret->Move(DeltaRotation.Yaw);
+	this->IsTurretMoving = FMath::Abs(DeltaRotation.Yaw) > 0.05f;
 }
 
 void UTankAimingComponent::GetProjectileSpawnInfo(FVector& Location, FRotator& Rotation) const {
