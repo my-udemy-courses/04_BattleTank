@@ -14,7 +14,7 @@ void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActor
 	// Work-out the required acceleration this frame to correct
 	auto Tank = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	auto StrafingSpeed = FVector::DotProduct(Tank->GetComponentVelocity(), Tank->GetRightVector());
-	UE_LOG(LogTemp, Warning, TEXT("sliding speed: %f"), StrafingSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("sliding speed: %f"), StrafingSpeed);
 	
 	auto CorrectionAcceleration = -StrafingSpeed / DeltaTime * Tank->GetRightVector();
 	// TODO: Calculate and apply sideways forcce (f = m * a)
@@ -24,10 +24,11 @@ void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActor
 
 void UTankTrack::SetThrottle(float Throttle) 
 {
-
-	// Clamp throttle
-	auto ForceApplied = GetForwardVector() * Throttle * MaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
 	auto Tank = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+	auto ForceApplied = GetForwardVector() * Throttle * MaxDrivingForce * Tank->GetMass();
+	
+	UE_LOG(LogTemp, Warning, TEXT("force: %f"), *ForceApplied.ToString())
+	
+	auto ForceLocation = GetComponentLocation();
 	Tank->AddForceAtLocation(ForceApplied, ForceLocation);
 }
